@@ -1,5 +1,6 @@
 package ru.practicum.shareit.user.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.DuplicateException;
@@ -15,6 +16,7 @@ import ru.practicum.shareit.user.storage.UserStorage;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
@@ -40,6 +42,7 @@ public class UserServiceImpl implements UserService {
     public UserDto addNewUser(NewUserDto newUserDto) {
         User newUser = UserMapper.toUser(newUserDto);
         checkIsValidUser(newUser);
+        log.info("Пользователь с email {} прошёл валидацию входных данных и готов к добавлению", newUser.getEmail());
         return UserMapper.toUserDto(userStorage.addUser(newUser));
     }
 
@@ -49,6 +52,7 @@ public class UserServiceImpl implements UserService {
     public UserDto updateUser(Long id, UpdateUserDto updateUserDto) {
         User updateUser = UserMapper.toUser(updateUserDto);
         checkIsValidUser(updateUser);
+        log.info("Пользователь с id {} прошёл валидацию входных данных и готов к обновлению", id);
         return UserMapper.toUserDto(userStorage.updateUser(id, updateUser));
     }
 
@@ -57,6 +61,7 @@ public class UserServiceImpl implements UserService {
      */
     public void deleteUser(Long id) {
         userStorage.deleteUser(id);
+        log.trace("Пользователь с id {} удалён", id);
     }
 
     /**
@@ -65,11 +70,15 @@ public class UserServiceImpl implements UserService {
      */
     private void checkIsValidUser(User checkUser) throws ValidationException {
         if (checkUser == null) {
-            throw new NotFoundException("Пользователь для валидации входных параметров не найден");
+            String nullError = "Пользователь для валидации входных параметров не найден";
+            log.error(nullError);
+            throw new NotFoundException(nullError);
         }
 
         if (checkUser.getEmail() != null && !checkUser.getEmail().contains("@")) {
-            throw new ValidationException("У пользователя должен быть email в корректном формате");
+            String emailError = "У пользователя должен быть email в корректном формате";
+            log.error(emailError);
+            throw new ValidationException(emailError);
         }
 
         List<User> users = userStorage.getAllUsers();
@@ -77,7 +86,9 @@ public class UserServiceImpl implements UserService {
                 .filter(user -> user.getEmail().equals(checkUser.getEmail()))
                 .findAny();
         if (sameUserByEmail.isPresent()) {
-            throw new DuplicateException("Пользователь с email " + checkUser.getEmail() + " уже существует.");
+            String sameEmailError = "Пользователь с email " + checkUser.getEmail() + " уже существует.";
+            log.error(sameEmailError);
+            throw new DuplicateException(sameEmailError);
         }
     }
 }
