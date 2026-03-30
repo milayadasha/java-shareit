@@ -5,18 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * TODO Sprint add-controllers.
- */
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class ItemDto {
+public class CommentDto {
     private Long id;
-    private String name;
-    private String description;
-    private Boolean available;
-    private Long owner;
-    private Long request;
+    private String text;
+    private String authorName;
+    private LocalDateTime created;
 }

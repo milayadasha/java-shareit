@@ -88,7 +88,7 @@ public class InMemoryItemStorage implements ItemStorage {
      */
     public List<Item> getItemsByUser(Long userId) {
         return items.values().stream()
-                .filter(item -> item.getOwner() != null && item.getOwner().equals(userId))
+                .filter(item -> item.getOwner() != null && item.getOwner().getId().equals(userId))
                 .toList();
     }
 
@@ -104,7 +104,7 @@ public class InMemoryItemStorage implements ItemStorage {
         List<Item> resultList = items.values().stream()
                 .filter(item -> item.getName().toLowerCase().contains(checkText) ||
                         item.getDescription().toLowerCase().contains(checkText))
-                .filter(Item::isAvailable)
+                .filter(Item::getAvailable)
                 .toList();
         if (!resultList.isEmpty()) {
             return resultList;
