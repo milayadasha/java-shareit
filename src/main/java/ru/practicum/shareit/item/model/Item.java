@@ -10,7 +10,8 @@ import ru.practicum.shareit.user.User;
  */
 @Entity
 @Table(name = "items")
-@Getter @Setter
+@Getter
+@Setter
 @Builder(toBuilder = true)
 @EqualsAndHashCode(of = { "id" })
 @AllArgsConstructor

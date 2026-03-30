@@ -9,7 +9,8 @@ import lombok.*;
  */
 @Entity
 @Table(name = "users")
-@Getter @Setter
+@Getter
+@Setter
 @Builder(toBuilder = true)
 @EqualsAndHashCode(of = { "id" })
 @AllArgsConstructor

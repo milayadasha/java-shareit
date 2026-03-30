@@ -12,7 +12,8 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "bookings")
-@Getter @Setter
+@Getter
+@Setter
 @Builder(toBuilder = true)
 @EqualsAndHashCode(of = { "id" })
 @AllArgsConstructor

@@ -9,7 +9,8 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "requests")
-@Getter @Setter
+@Getter
+@Setter
 @Builder(toBuilder = true)
 @EqualsAndHashCode(of = { "id" })
 @AllArgsConstructor
