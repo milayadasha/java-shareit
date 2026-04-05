@@ -2,6 +2,7 @@ package ru.practicum.shareit.user;
 
 import ru.practicum.shareit.user.dto.NewUserDto;
 import ru.practicum.shareit.user.dto.UpdateUserDto;
+import ru.practicum.shareit.user.dto.UserBookingDto;
 import ru.practicum.shareit.user.dto.UserDto;
 
 public class UserMapper {
@@ -25,5 +26,12 @@ public class UserMapper {
                 .name(userDto.getName())
                 .email(userDto.getEmail())
                 .build();
+    }
+
+    public static UserBookingDto toUserBookingDto(User user) {
+        return new UserBookingDto(
+                user.getId(),
+                user.getName()
+        );
     }
 }
