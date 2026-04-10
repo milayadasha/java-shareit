@@ -94,8 +94,8 @@ class BookingServiceImplUnitTest {
                 .when(itemRepository.findById(ITEM_ID))
                 .thenReturn(Optional.of(item));
 
-        Mockito.
-                when(bookingRepository.save(any(Booking.class)))
+        Mockito
+                .when(bookingRepository.save(any(Booking.class)))
                 .thenReturn(booking);
 
         // when
@@ -118,11 +118,11 @@ class BookingServiceImplUnitTest {
         owner.setId(OWNER_ID);
         item.setOwner(owner);
 
-        Mockito.
-                when(bookingRepository.findById(BOOKING_ID))
+        Mockito
+                .when(bookingRepository.findById(BOOKING_ID))
                 .thenReturn(Optional.of(booking));
-        Mockito.
-                when(bookingRepository.save(any(Booking.class)))
+        Mockito
+                .when(bookingRepository.save(any(Booking.class)))
                 .thenReturn(booking);
 
         //when
@@ -139,7 +139,8 @@ class BookingServiceImplUnitTest {
     @Test
     void test_getBookingById_ShouldReturnBooking() {
         //given && when
-        Mockito.when(bookingRepository.findById(BOOKING_ID))
+        Mockito
+                .when(bookingRepository.findById(BOOKING_ID))
                 .thenReturn(Optional.of(booking));
 
         // then
@@ -158,8 +159,8 @@ class BookingServiceImplUnitTest {
     @DisplayName("При запросе всех бронирований пользователя со статусом ALL должен вернуть список")
     void test_getAllBookingsByUser_WhenAllShouldReturnBooking() {
         //given
-        Mockito.
-                when(bookingRepository.findAllByBookerIdOrderByStartDesc(BOOKER_ID))
+        Mockito
+                .when(bookingRepository.findAllByBookerIdOrderByStartDesc(BOOKER_ID))
                 .thenReturn(List.of(booking));
 
         //when
@@ -179,8 +180,8 @@ class BookingServiceImplUnitTest {
     @DisplayName("При запросе всех бронирований пользователя со статусом WAITING должен вернуть список")
     void test_getAllBookingsByUser_WhenWaitingShouldReturnBooking() {
         //given
-        Mockito.
-                when(bookingRepository
+        Mockito
+                .when(bookingRepository
                         .findAllByBookerIdAndStatusOrderByStartDesc(BOOKER_ID, BookingStatus.valueOf(STATE_WAITING)))
                 .thenReturn(List.of(booking));
 
@@ -202,8 +203,8 @@ class BookingServiceImplUnitTest {
     @DisplayName("При запросе всех бронирований пользователя со статусом CURRENT должен вернуть список")
     void test_getAllBookingsByUser_WhenCurrentShouldReturnBooking() {
         //given
-        Mockito.
-                when(bookingRepository.findCurrentByBookerId(BOOKER_ID))
+        Mockito
+                .when(bookingRepository.findCurrentByBookerId(BOOKER_ID))
                 .thenReturn(List.of(booking));
 
         //when
@@ -223,8 +224,8 @@ class BookingServiceImplUnitTest {
     @DisplayName("При запросе всех бронирований пользователя со статусом FUTURE должен вернуть список")
     void test_getAllBookingsByUser_WhenFutureShouldReturnBooking() {
         //given
-        Mockito.
-                when(bookingRepository.findFutureByBookerId(BOOKER_ID))
+        Mockito
+                .when(bookingRepository.findFutureByBookerId(BOOKER_ID))
                 .thenReturn(List.of(booking));
 
         //when
@@ -244,8 +245,8 @@ class BookingServiceImplUnitTest {
     @DisplayName("При запросе всех бронирований пользователя со статусом PAST должен вернуть список")
     void test_getAllBookingsByUser_WhenPastShouldReturnBooking() {
         //given
-        Mockito.
-                when(bookingRepository.findPastByBookerId(BOOKER_ID))
+        Mockito
+                .when(bookingRepository.findPastByBookerId(BOOKER_ID))
                 .thenReturn(List.of(booking));
 
         //when
@@ -265,8 +266,8 @@ class BookingServiceImplUnitTest {
     @DisplayName("При запросе всех бронирований владельца со статусом ALL должен вернуть список")
     void test_getAllUserBookings_WhenAllShouldReturnBooking() {
         //given
-        Mockito.
-                when(bookingRepository.findAllByItemOwnerIdOrderByStartDesc(OWNER_ID))
+        Mockito
+                .when(bookingRepository.findAllByItemOwnerIdOrderByStartDesc(OWNER_ID))
                 .thenReturn(List.of(booking));
 
         //when
@@ -286,8 +287,8 @@ class BookingServiceImplUnitTest {
     @DisplayName("При запросе всех бронирований владельца со статусом WAITING должен вернуть список")
     void test_getAllUserBookings_WhenWaitingShouldReturnBooking() {
         //given
-        Mockito.
-                when(bookingRepository
+        Mockito
+                .when(bookingRepository
                         .findAllByOwnerIdAndStatusOrderByStartDesc(OWNER_ID, BookingStatus.valueOf(STATE_WAITING)))
                 .thenReturn(List.of(booking));
 
@@ -309,8 +310,8 @@ class BookingServiceImplUnitTest {
     @DisplayName("При запросе всех бронирований владельца со статусом CURRENT должен вернуть список")
     void test_getAllUserBookings_WhenCurrentShouldReturnBooking() {
         //given
-        Mockito.
-                when(bookingRepository.findCurrentByOwnerId(OWNER_ID))
+        Mockito
+                .when(bookingRepository.findCurrentByOwnerId(OWNER_ID))
                 .thenReturn(List.of(booking));
 
         //when
@@ -330,8 +331,8 @@ class BookingServiceImplUnitTest {
     @DisplayName("При запросе всех бронирований владельца со статусом FUTURE должен вернуть список")
     void test_getAllUserBookings_WhenFutureShouldReturnBooking() {
         //given
-        Mockito.
-                when(bookingRepository.findFutureByOwnerId(OWNER_ID))
+        Mockito
+                .when(bookingRepository.findFutureByOwnerId(OWNER_ID))
                 .thenReturn(List.of(booking));
 
         //when
@@ -351,8 +352,8 @@ class BookingServiceImplUnitTest {
     @DisplayName("При запросе всех бронирований владельца со статусом PAST должен вернуть список")
     void test_getAllUserBookings_WhenPastShouldReturnBooking() {
         //given
-        Mockito.
-                when(bookingRepository.findPastByOwnerId(OWNER_ID))
+        Mockito
+                .when(bookingRepository.findPastByOwnerId(OWNER_ID))
                 .thenReturn(List.of(booking));
 
         //when
