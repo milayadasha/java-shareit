@@ -29,7 +29,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class ItemServiceImplUnitTest {
@@ -116,7 +115,6 @@ public class ItemServiceImplUnitTest {
         verify(itemRepository, times(1)).save(any(Item.class));
         verify(userRepository, times(2)).findById(OWNER_ID);
     }
-
 
     @Test
     @DisplayName("При добавлении вещи c несуществующим запросом должен вернуть ошибку")
