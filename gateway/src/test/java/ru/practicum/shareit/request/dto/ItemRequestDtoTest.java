@@ -48,13 +48,11 @@ public class ItemRequestDtoTest {
     @DisplayName("Проверяет десериализацию")
     void test_ItemRequestDto_WhenDeserializeShouldReturnDto() throws Exception {
         //given
-        String content = String.format("""
-                {
-                    "id": %d,
-                    "description": "%s",
-                    "created": "%s"
-                }
-                """, REQUEST_ID, DESCRIPTION, CREATED_STRING);
+        String content = String.format("{"
+                + "\"id\": %d,"
+                + "\"description\": \"%s\","
+                + "\"created\": \"%s\""
+                + "}", REQUEST_ID, DESCRIPTION, CREATED_STRING);
 
         //when
         ItemRequestDto dto = json.parse(content).getObject();

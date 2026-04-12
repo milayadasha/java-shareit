@@ -50,14 +50,12 @@ public class CommentDtoTest {
     @Test
     @DisplayName("Проверяет десериализацию")
     void test_CommentDto_WhenDeserializeShouldReturnDto() throws Exception {
-        String content = String.format("""
-                {
-                    "id": %d,
-                    "text": "%s",
-                    "authorName": "%s",
-                    "created": "%s"
-                }
-                """, COMMENT_ID, TEXT, AUTHOR_NAME, CREATED_STRING);
+        String content = String.format("{"
+                + "\"id\": %d,"
+                + "\"text\": \"%s\","
+                + "\"authorName\": \"%s\","
+                + "\"created\": \"%s\""
+                + "}", COMMENT_ID, TEXT, AUTHOR_NAME, CREATED_STRING);
 
         CommentDto dto = json.parse(content).getObject();
 

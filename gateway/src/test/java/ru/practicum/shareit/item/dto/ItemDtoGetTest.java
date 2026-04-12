@@ -77,24 +77,20 @@ public class ItemDtoGetTest {
     @DisplayName("Проверяет десериализацию")
     void testDeserialize_shouldReturnDto() throws Exception {
         //given
-        String content = String.format("""
-                        {
-                            "id": %d,
-                            "name": "%s",
-                            "description": "%s",
-                            "available": %s,
-                            "owner": %d,
-                            "request": %d,
-                            "comments": [
-                                {
-                                    "id": %d,
-                                    "text": "%s",
-                                    "authorName": "%s",
-                                    "created": "%s"
-                                }
-                            ]
-                        }
-                        """, ITEM_ID, ITEM_NAME, ITEM_DESCRIPTION, ITEM_AVAILABLE, OWNER_ID, REQUEST_ID,
+        String content = String.format("{"
+                        + "\"id\": %d,"
+                        + "\"name\": \"%s\","
+                        + "\"description\": \"%s\","
+                        + "\"available\": %s,"
+                        + "\"owner\": %d,"
+                        + "\"request\": %d,"
+                        + "\"comments\": [{"
+                        + "\"id\": %d,"
+                        + "\"text\": \"%s\","
+                        + "\"authorName\": \"%s\","
+                        + "\"created\": \"%s\""
+                        + "}]"
+                        + "}", ITEM_ID, ITEM_NAME, ITEM_DESCRIPTION, ITEM_AVAILABLE, OWNER_ID, REQUEST_ID,
                 COMMENT_ID, COMMENT_TEXT, AUTHOR_NAME, CREATED_STRING);
 
         //when

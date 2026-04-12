@@ -44,12 +44,10 @@ public class NewItemRequestDtoTest {
     @DisplayName("Проверяет десериализацию")
     void test_NewItemRequestDto_WhenDeserializeShouldReturnDto() throws Exception {
         //given
-        String content = String.format("""
-                {
-                    "description": "%s",
-                    "created": "%s"
-                }
-                """, DESCRIPTION, CREATED_STRING);
+        String content = String.format("{"
+                + "\"description\": \"%s\","
+                + "\"created\": \"%s\""
+                + "}", DESCRIPTION, CREATED_STRING);
 
         //when
         NewItemRequestDto dto = json.parse(content).getObject();

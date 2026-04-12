@@ -38,12 +38,10 @@ public class NewUserDtoTest {
     @DisplayName("Проверяет десериализацию")
     void test_NewUserDto_WhenDeserializeShouldReturnDto() throws Exception {
         //given
-        String content = String.format("""
-                {
-                    "name": "%s",
-                    "email": "%s"
-                }
-                """, USER_NAME, USER_EMAIL);
+        String content = String.format("{"
+                + "\"name\": \"%s\","
+                + "\"email\": \"%s\""
+                + "}", USER_NAME, USER_EMAIL);
 
         //when
         NewUserDto dto = json.parse(content).getObject();

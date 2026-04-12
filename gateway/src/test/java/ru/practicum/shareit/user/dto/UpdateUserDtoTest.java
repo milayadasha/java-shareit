@@ -43,13 +43,11 @@ public class UpdateUserDtoTest {
     @DisplayName("Проверяет десериализацию")
     void test_UpdateUserDto_WhenDeserializeShouldReturnDto() throws Exception {
         //given
-        String content = String.format("""
-                {
-                    "id": "%s",
-                    "name": "%s",
-                    "email": "%s"
-                }
-                """, USER_ID, UPDATED_NAME, UPDATED_EMAIL);
+        String content = String.format("{"
+                + "\"id\": %s,"
+                + "\"name\": \"%s\","
+                + "\"email\": \"%s\""
+                + "}", USER_ID, UPDATED_NAME, UPDATED_EMAIL);
 
         //when
         UpdateUserDto dto = json.parse(content).getObject();
@@ -64,11 +62,7 @@ public class UpdateUserDtoTest {
     @DisplayName("Проверяет десериализацию, когда обновляется только имя")
     void test_UpdateUserDto_WhenOnlyNameProvidedShouldDeserialize() throws Exception {
         //given
-        String content = String.format("""
-                {
-                    "name": "%s"
-                }
-                """, UPDATED_NAME);
+        String content = String.format("{\"name\": \"%s\"}", UPDATED_NAME);
 
         //when
         UpdateUserDto dto = json.parse(content).getObject();
@@ -82,11 +76,7 @@ public class UpdateUserDtoTest {
     @DisplayName("Проверяет десериализацию, когда обновляется только email")
     void test_UpdateUserDto_WhenOnlyEmailProvidedShouldDeserialize() throws Exception {
         //given
-        String content = String.format("""
-                {
-                    "email": "%s"
-                }
-                """, UPDATED_EMAIL);
+        String content = String.format("{\"email\": \"%s\"}", UPDATED_EMAIL);
 
         //when
         UpdateUserDto dto = json.parse(content).getObject();

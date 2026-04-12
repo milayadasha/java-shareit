@@ -116,34 +116,30 @@ public class ItemDtoGetByIdTest {
     @DisplayName("Проверяет десериализацию")
     void test_ItemDtoGetById_WhenDeserializeShouldReturnDto() throws Exception {
         //given
-        String content = String.format("""
-                        {
-                            "id": %d,
-                            "name": "%s",
-                            "description": "%s",
-                            "available": %s,
-                            "lastBooking": {
-                                "id": %d,
-                                "bookerId": %d,
-                                "start": "%s",
-                                "end": "%s"
-                            },
-                            "nextBooking": {
-                                "id": %d,
-                                "bookerId": %d,
-                                "start": "%s",
-                                "end": "%s"
-                            },
-                            "comments": [
-                                {
-                                    "id": %d,
-                                    "text": "%s",
-                                    "authorName": "%s",
-                                    "created": "%s"
-                                }
-                            ]
-                        }
-                        """, ITEM_ID, ITEM_NAME, ITEM_DESCRIPTION, ITEM_AVAILABLE,
+        String content = String.format("{"
+                        + "\"id\": %d,"
+                        + "\"name\": \"%s\","
+                        + "\"description\": \"%s\","
+                        + "\"available\": %s,"
+                        + "\"lastBooking\": {"
+                        + "\"id\": %d,"
+                        + "\"bookerId\": %d,"
+                        + "\"start\": \"%s\","
+                        + "\"end\": \"%s\""
+                        + "},"
+                        + "\"nextBooking\": {"
+                        + "\"id\": %d,"
+                        + "\"bookerId\": %d,"
+                        + "\"start\": \"%s\","
+                        + "\"end\": \"%s\""
+                        + "},"
+                        + "\"comments\": [{"
+                        + "\"id\": %d,"
+                        + "\"text\": \"%s\","
+                        + "\"authorName\": \"%s\","
+                        + "\"created\": \"%s\""
+                        + "}]"
+                        + "}", ITEM_ID, ITEM_NAME, ITEM_DESCRIPTION, ITEM_AVAILABLE,
                 LAST_BOOKING_ID, LAST_BOOKER_ID, LAST_START_STRING, LAST_END_STRING,
                 NEXT_BOOKING_ID, NEXT_BOOKER_ID, NEXT_START_STRING, NEXT_END_STRING,
                 COMMENT_ID, COMMENT_TEXT, AUTHOR_NAME, CREATED_STRING);

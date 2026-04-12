@@ -83,25 +83,23 @@ public class BookingDtoTest {
     @DisplayName("Проверяет десериализацию")
     void testDeserialize_shouldReturnDto() throws Exception {
         //given
-        String content = String.format("""
-                        {
-                            "id": %d,
-                            "start": "%s",
-                            "end": "%s",
-                            "status": "%s",
-                            "item": {
-                                "id": %d,
-                                "name": "%s",
-                                "description": "%s",
-                                "available": %s,
-                                "owner": %d
-                            },
-                            "booker": {
-                                "id": %d,
-                                "name": "%s"
-                            }
-                        }
-                        """, BOOKING_ID, START_STRING, END_STRING, STATUS,
+        String content = String.format("{"
+                        + "\"id\": %d,"
+                        + "\"start\": \"%s\","
+                        + "\"end\": \"%s\","
+                        + "\"status\": \"%s\","
+                        + "\"item\": {"
+                        +     "\"id\": %d,"
+                        +     "\"name\": \"%s\","
+                        +     "\"description\": \"%s\","
+                        +     "\"available\": %s,"
+                        +     "\"owner\": %d"
+                        + "},"
+                        + "\"booker\": {"
+                        +     "\"id\": %d,"
+                        +     "\"name\": \"%s\""
+                        + "}"
+                        + "}", BOOKING_ID, START_STRING, END_STRING, STATUS,
                 ITEM_ID, ITEM_NAME, ITEM_DESCRIPTION, ITEM_AVAILABLE, OWNER_ID,
                 BOOKER_ID, BOOKER_NAME);
 

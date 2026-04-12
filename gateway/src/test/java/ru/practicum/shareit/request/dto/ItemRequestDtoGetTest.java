@@ -66,21 +66,16 @@ public class ItemRequestDtoGetTest {
     @DisplayName("Проверяет десериализацию")
     void test_ItemRequestDtoGet_WhenDeserializeShouldReturnDto() throws Exception {
         //given
-        String content = String.format("""
-                        {
-                            "id": %d,
-                            "description": "%s",
-                            "created": "%s",
-                            "items": [
-                                {
-                                    "id": %d,
-                                    "name": "%s",
-                                    "ownerId": %d
-                                }
-                            ]
-                        }
-                        """, REQUEST_ID, DESCRIPTION, CREATED_STRING,
-                ITEM_ID, ITEM_NAME, OWNER_ID);
+        String content = String.format("{"
+                + "\"id\": %d,"
+                + "\"description\": \"%s\","
+                + "\"created\": \"%s\","
+                + "\"items\": [{"
+                + "\"id\": %d,"
+                + "\"name\": \"%s\","
+                + "\"ownerId\": %d"
+                + "}]"
+                + "}", REQUEST_ID, DESCRIPTION, CREATED_STRING, ITEM_ID, ITEM_NAME, OWNER_ID);
 
         //when
         ItemRequestDtoGet dto = json.parse(content).getObject();
@@ -95,4 +90,3 @@ public class ItemRequestDtoGetTest {
         assertThat(dto.getItems().get(0).getOwnerId()).isEqualTo(OWNER_ID.intValue());
     }
 }
-

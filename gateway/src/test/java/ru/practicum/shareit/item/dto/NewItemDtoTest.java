@@ -55,16 +55,14 @@ class NewItemDtoTest {
     @DisplayName("Проверяет десериализацию со всеми полями")
     void test_NewItemDto_WhenDeserializeShouldReturnDto() throws Exception {
         //given
-        String content = String.format("""
-                {
-                    "id": %d,
-                    "name": "%s",
-                    "description": "%s",
-                    "available": %s,
-                    "owner": %d,
-                    "requestId": %d
-                }
-                """, ITEM_ID, ITEM_NAME, ITEM_DESCRIPTION, AVAILABLE, OWNER_ID, REQUEST_ID);
+        String content = String.format("{"
+                + "\"id\": %d,"
+                + "\"name\": \"%s\","
+                + "\"description\": \"%s\","
+                + "\"available\": %s,"
+                + "\"owner\": %d,"
+                + "\"requestId\": %d"
+                + "}", ITEM_ID, ITEM_NAME, ITEM_DESCRIPTION, AVAILABLE, OWNER_ID, REQUEST_ID);
 
         //when
         NewItemDto dto = json.parse(content).getObject();
@@ -82,13 +80,11 @@ class NewItemDtoTest {
     @DisplayName("Проверяет десериализацию только с обязательными полями")
     void test_NewItemDto_WhenWithoutOptionalFieldsShouldDeserialize() throws Exception {
         //given
-        String content = String.format("""
-                {
-                    "name": "%s",
-                    "description": "%s",
-                    "available": %s
-                }
-                """, ITEM_NAME, ITEM_DESCRIPTION, AVAILABLE);
+        String content = String.format("{"
+                + "\"name\": \"%s\","
+                + "\"description\": \"%s\","
+                + "\"available\": %s"
+                + "}", ITEM_NAME, ITEM_DESCRIPTION, AVAILABLE);
 
         //when
         NewItemDto dto = json.parse(content).getObject();

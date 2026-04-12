@@ -24,13 +24,11 @@ public class NewBookingDtoTest {
             LocalDateTime.of(2026, 4, 12, 12, 0, 0);
     private static final String START_STRING = START.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     private static final String END_STRING = END.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-    private static final String content = """
-            {
-                "itemId": 1,
-                "start": "2026-04-10T12:00:00",
-                "end": "2026-04-12T12:00:00"
-            }
-            """;
+    private static final String content = "{"
+            + "\"itemId\": 1,"
+            + "\"start\": \"2026-04-10T12:00:00\","
+            + "\"end\": \"2026-04-12T12:00:00\""
+            + "}";
 
     @Test
     @DisplayName("Проверяет сериализацию")
