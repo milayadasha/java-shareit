@@ -13,6 +13,9 @@ import ru.practicum.shareit.booking.BookingStatus;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.NewBookingDto;
 import ru.practicum.shareit.booking.storage.BookingRepository;
+import ru.practicum.shareit.exception.AuthorizationException;
+import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.storage.ItemRepository;
 import ru.practicum.shareit.user.User;
@@ -23,9 +26,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class BookingServiceImplUnitTest {
@@ -49,8 +52,10 @@ class BookingServiceImplUnitTest {
     private static final Long BOOKER_ID = 1L;
     private static final Long OWNER_ID = 2L;
     private static final Long ITEM_ID = 3L;
+    private static final Long OTHER_OWNER_ID = 26L;
 
     private static final Boolean ITEM_AVAILABLE = true;
+    private static final Boolean ITEM_NOT_AVAILABLE = false;
     private static final Boolean BOOKING_APPROVED = true;
 
     private static final BookingStatus STATUS_WAITING = BookingStatus.WAITING;
@@ -111,6 +116,48 @@ class BookingServiceImplUnitTest {
     }
 
     @Test
+    @DisplayName("При добавлении бронирования должен выбросить ошибку, если даты не корректные")
+    void test_addBooking_WhenStartAfterEndShouldThrowValidationException() {
+        //given
+        NewBookingDto dto = new NewBookingDto();
+        dto.setItemId(ITEM_ID);
+        dto.setStart(LocalDateTime.now().plusDays(2));
+        dto.setEnd(LocalDateTime.now().plusDays(1));
+
+        Mockito
+                .when(userRepository.findById(BOOKER_ID))
+                .thenReturn(Optional.of(booker));
+
+        //when & then
+        assertThatThrownBy(() -> bookingService.addBooking(BOOKER_ID, dto))
+                .isInstanceOf(ValidationException.class);
+
+        verify(bookingRepository, never()).save(any());
+    }
+
+    @Test
+    @DisplayName("При добавлении бронирования должен выбросить ошибку, если вещь не доступна")
+    void test_addBooking_WhenItemNotAvailableShouldThrowException() {
+        //given && when
+        NewBookingDto dto = new NewBookingDto();
+        dto.setItemId(ITEM_ID);
+        dto.setStart(LocalDateTime.now().plusDays(1));
+        dto.setEnd(LocalDateTime.now().plusDays(2));
+
+        item.setAvailable(ITEM_NOT_AVAILABLE);
+
+        Mockito
+                .when(userRepository.findById(BOOKER_ID))
+                .thenReturn(Optional.of(booker));
+        Mockito
+                .when(itemRepository.findById(ITEM_ID))
+                .thenReturn(Optional.of(item));
+
+        assertThatThrownBy(() -> bookingService.addBooking(BOOKER_ID, dto))
+                .isInstanceOf(ValidationException.class);
+    }
+
+    @Test
     @DisplayName("При подтверждении бронирования должен изменить статус на APPROVED")
     void test_approveBooking_WhenWaitStatusReturnApproved() {
         //given
@@ -137,6 +184,30 @@ class BookingServiceImplUnitTest {
     }
 
     @Test
+    @DisplayName("При подтверждении бронирования должен выбросить ошибку, если не владелец")
+    void test_approveBooking_WhenNotOwnerShouldThrowException() {
+        //given && when
+        User owner = new User();
+        owner.setId(OWNER_ID);
+
+        Item item = new Item();
+        item.setOwner(owner);
+
+        Booking booking = new Booking();
+        booking.setId(BOOKING_ID);
+        booking.setItem(item);
+        booking.setStatus(BookingStatus.WAITING);
+
+        Mockito
+                .when(bookingRepository.findById(BOOKING_ID)).thenReturn(Optional.of(booking));
+
+        //then
+        assertThatThrownBy(() -> bookingService.approveBooking(OTHER_OWNER_ID, BOOKING_ID, true))
+                .isInstanceOf(AuthorizationException.class);
+    }
+
+    @Test
+    @DisplayName("При запросе бронирования по id должен вернуть его")
     void test_getBookingById_ShouldReturnBooking() {
         //given && when
         Mockito
@@ -151,6 +222,15 @@ class BookingServiceImplUnitTest {
         assertThat(result.getBooker().getId()).isEqualTo(BOOKER_ID);
         assertThat(result.getItem().getId()).isEqualTo(ITEM_ID);
         assertThat(result.getItem().getAvailable()).isEqualTo(ITEM_AVAILABLE);
+
+        verify(bookingRepository, times(1)).findById(BOOKING_ID);
+    }
+
+    @Test
+    @DisplayName("При запросе бронирования по id должен выбросить ошибку, если оно не найдено")
+    void test_getBookingById_WhenNotFoundShouldThrowException() {
+        //given && when && then
+        assertThatThrownBy(() -> bookingService.getBookingById(BOOKING_ID)).isInstanceOf(NotFoundException.class);
 
         verify(bookingRepository, times(1)).findById(BOOKING_ID);
     }
@@ -263,6 +343,16 @@ class BookingServiceImplUnitTest {
     }
 
     @Test
+    @DisplayName("При запросе всех бронирований пользователя должен вернуть пустой список, если их нет")
+    void test_getAllBookingsByUser_WhenNoBookingsShouldThrowException() {
+        //given && when && then
+        assertThatThrownBy(() -> bookingService.getAllUserBookings(OWNER_ID, STATE_ALL))
+                .isInstanceOf(NotFoundException.class);
+
+        verify(bookingRepository, times(1)).findAllByItemOwnerIdOrderByStartDesc(OWNER_ID);
+    }
+
+    @Test
     @DisplayName("При запросе всех бронирований владельца со статусом ALL должен вернуть список")
     void test_getAllUserBookings_WhenAllShouldReturnBooking() {
         //given
@@ -367,5 +457,20 @@ class BookingServiceImplUnitTest {
         assertThat(result.get(0).getItem().getAvailable()).isEqualTo(ITEM_AVAILABLE);
 
         verify(bookingRepository, times(1)).findPastByOwnerId(OWNER_ID);
+    }
+
+    @Test
+    @DisplayName("При запросе всех бронирований владельца должен вернуть ошибку, если их нет")
+    void test_getAllUserBookings_WhenNoBookingsShouldThrowException() {
+        //given && when
+        Mockito
+                .when(bookingRepository.findAllByItemOwnerIdOrderByStartDesc(OWNER_ID))
+                .thenReturn(List.of());
+
+        //then
+        assertThatThrownBy(() -> bookingService.getAllUserBookings(OWNER_ID, STATE_ALL))
+                .isInstanceOf(NotFoundException.class);
+
+        verify(bookingRepository, times(1)).findAllByItemOwnerIdOrderByStartDesc(OWNER_ID);
     }
 }
