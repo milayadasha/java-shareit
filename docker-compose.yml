@@ -19,6 +19,7 @@ services:
     depends_on:
       - db
     environment:
+      - TZ=UTC
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/shareit
       - SPRING_DATASOURCE_USERNAME=dbuser
       - SPRING_DATASOURCE_PASSWORD=12345
@@ -27,7 +28,7 @@ services:
     image: postgres:16.1
     container_name: shareit_postgres_full
     environment:
-      TZ: Europe/Moscow
+      TZ: UTC
       POSTGRES_DB: shareit
       POSTGRES_USER: dbuser
       POSTGRES_PASSWORD: 12345

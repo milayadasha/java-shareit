@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingStatus;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,7 +64,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query(" SELECT b FROM Booking b " +
             "WHERE b.booker.id = ?1 " +
             "AND b.item.id = ?2 " +
-            "AND b.end < CURRENT_TIMESTAMP " +
+            "AND b.end < LOCALTIMESTAMP " +
             "AND b.status LIKE 'APPROVED' " +
             "ORDER BY b.end DESC")
     List<Booking> findPastByBookerIdAndItemIdAndStatusApproved(Long bookerId, Long itemId);
@@ -87,4 +88,9 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "ORDER BY b.start ASC " +
             "LIMIT 1")
     Optional<Booking> findNextApprovedBookingForOwner(Long itemId, Long ownerId);
+
+    @Query(value = "SELECT LOCALTIMESTAMP", nativeQuery = true)
+    Instant getLocalTimestamp();
+
+    List<Booking> findAllApprovedByBookerIdAndItemId(Long bookerId,Long itemId);
 }

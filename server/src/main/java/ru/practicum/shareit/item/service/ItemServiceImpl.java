@@ -21,6 +21,7 @@ import ru.practicum.shareit.request.storage.ItemRequestRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.storage.UserRepository;
 
+import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -230,8 +231,19 @@ public class ItemServiceImpl implements ItemService {
      */
     private void checkIsValidBookingForAddComment(Long userId, Long itemId) {
         log.info("Началась внутренняя проверка бронирований вещи {} пользователем {}", itemId, userId);
+
+        Instant dbNow = bookingRepository.getLocalTimestamp();
+        log.info("LOCALTIMESTAMP в БД: {}", dbNow);
+
+        List<Booking> allApproved = bookingRepository.findAllApprovedByBookerIdAndItemId(userId, itemId);
+        log.info("Все APPROVED бронирования: {}", allApproved.size());
+        for (Booking b : allApproved) {
+            log.info("  Booking id={}, end={}, status={}", b.getId(), b.getEnd(), b.getStatus());
+        }
+
         List<Booking> itemBookings = bookingRepository.findPastByBookerIdAndItemIdAndStatusApproved(userId, itemId);
-        log.info("Бронирования вещи {} пользователем {} найдены в количестве: {}", itemId, userId, itemBookings.size());
+        log.info("Завершённые бронирования вещи {} пользователем {} найдены в количестве: {}",
+                itemId, userId, itemBookings.size());
         if (itemBookings.isEmpty()) {
             throw new ValidationException("Пользователь " + userId + "не бронировал вещь " + itemId);
         }
