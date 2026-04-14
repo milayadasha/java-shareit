@@ -4,14 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.NewBookingDto;
 import ru.practicum.shareit.booking.service.BookingServiceImpl;
@@ -27,17 +25,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
-@ExtendWith(MockitoExtension.class)
+@WebMvcTest(BookingController.class)
 class BookingControllerTest {
-    @Mock
+    @MockBean(name = "bookingServiceImpl")
     private BookingServiceImpl bookingService;
 
-    @InjectMocks
+    @Autowired
     private BookingController bookingController;
 
+    @Autowired
     private MockMvc mvc;
 
-    private final ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
+    @Autowired
+    private ObjectMapper mapper;
 
     private NewBookingDto newBookingDto;
     private BookingDto bookingDto;
@@ -61,8 +61,6 @@ class BookingControllerTest {
 
     @BeforeEach
     void setUp() {
-        mvc = MockMvcBuilders.standaloneSetup(bookingController).build();
-
         newBookingDto = new NewBookingDto();
         newBookingDto.setStart(LocalDateTime.now().plusDays(1));
         newBookingDto.setEnd(LocalDateTime.now().plusDays(2));

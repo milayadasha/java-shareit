@@ -8,6 +8,7 @@ services:
     depends_on:
       - server
     environment:
+      - TZ=UTC
       - SHAREIT_SERVER_URL=http://server:9090
 
   server:

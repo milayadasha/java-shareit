@@ -4,14 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.service.ItemServiceImpl;
 import ru.practicum.shareit.user.User;
@@ -26,17 +24,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
-@ExtendWith(MockitoExtension.class)
+@WebMvcTest(ItemController.class)
 public class ItemControllerTest {
-    @Mock
+    @MockBean(name = "itemServiceImpl")
     private ItemServiceImpl itemService;
 
-    @InjectMocks
-    private ItemController itemController;
-
+    @Autowired
     private MockMvc mvc;
 
-    private final ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
+    @Autowired
+    private ObjectMapper mapper;
 
     private ItemDto itemDto;
     private User owner;
@@ -59,8 +56,6 @@ public class ItemControllerTest {
 
     @BeforeEach
     void setUp() {
-        mvc = MockMvcBuilders.standaloneSetup(itemController).build();
-
         owner = new User();
         owner.setId(OWNER_ID);
 

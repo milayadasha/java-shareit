@@ -1,7 +1,6 @@
 package ru.practicum.shareit.booking;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,8 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ru.practicum.shareit.booking.dto.NewBookingDto;
 
-
-@Controller
+@RestController
 @RequestMapping(path = "/bookings")
 @RequiredArgsConstructor
 @Slf4j
@@ -25,7 +23,6 @@ public class BookingController {
     @PostMapping
     public ResponseEntity<Object> addBooking(@RequestHeader("X-Sharer-User-Id") long userId,
                                              @RequestBody @Valid NewBookingDto requestDto) {
-        log.info("Добавление бронирование {} от пользователя {}", requestDto, userId);
         return bookingClient.addBooking(userId, requestDto);
     }
 
@@ -36,7 +33,6 @@ public class BookingController {
     public ResponseEntity<Object> approveBooking(@RequestHeader("X-Sharer-User-Id") long userId,
                                                  @PathVariable long bookingId,
                                                  @RequestParam Boolean approved) {
-        log.info("Проставляем статус бронирования {} для пользователя {}", bookingId, userId);
         return bookingClient.approveBooking(userId, bookingId, approved);
     }
 
@@ -45,7 +41,6 @@ public class BookingController {
      */
     @GetMapping("/{bookingId}")
     public ResponseEntity<Object> getBooking(@PathVariable Long bookingId) {
-        log.info("Получаем бронирование {} ", bookingId);
         return bookingClient.getBookingById(bookingId);
     }
 
@@ -58,7 +53,6 @@ public class BookingController {
                                                        String stateParam) {
         BookingState state = BookingState.from(stateParam)
                 .orElseThrow(() -> new IllegalArgumentException("Неизвестное состояние: " + stateParam));
-        log.info("Получаем бронирование с состоянием {} от пользователя {}", stateParam, userId);
         return bookingClient.getAllBookingsByUser(userId, state);
     }
 
@@ -69,7 +63,6 @@ public class BookingController {
     public ResponseEntity<Object> getAllUserBookings(@RequestHeader("X-Sharer-User-Id") long userId,
                                                      @RequestParam(name = "state", defaultValue = "ALL")
                                                      String stateParam) {
-        log.info("Получаем бронирование с состоянием {} для пользователя {}", stateParam, userId);
         return bookingClient.getAllUserBookings(userId, stateParam);
     }
 }

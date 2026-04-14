@@ -4,16 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestDtoGet;
 import ru.practicum.shareit.request.dto.NewItemRequestDto;
@@ -27,16 +25,19 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(MockitoExtension.class)
+@WebMvcTest(ItemRequestController.class)
 public class ItemRequestControllerTest {
-    @Mock
+    @MockBean
     private ItemRequestClient itemRequestClient;
 
-    @InjectMocks
+    @Autowired
     private ItemRequestController itemRequestController;
 
+    @Autowired
     private MockMvc mvc;
-    private final ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
+
+    @Autowired
+    private ObjectMapper mapper;
 
     private ItemRequestDto itemRequestDto;
     private ItemRequestDtoGet itemRequestDtoGet;
@@ -50,8 +51,6 @@ public class ItemRequestControllerTest {
 
     @BeforeEach
     public void setUpData() {
-        mvc = MockMvcBuilders.standaloneSetup(itemRequestController).build();
-
         newItemRequestDto = new NewItemRequestDto();
         newItemRequestDto.setDescription(REQUEST_DESCRIPTION);
 
